@@ -1,0 +1,32 @@
+block household
+{
+	definitions
+	{
+		u[] = C[]^(1 - sigma_C) / (1 - simga_C) - L[]^(1 - simga_L) / (1 - sigma_L);
+	};
+
+	objective
+	{
+		U[] = u[] + beta * E[][U[1]];
+	};
+
+	controls
+	{
+		C[], I[], K[], L[];
+	};
+
+	constraints
+	{
+		C[] + I[] = r[] * K[-1] + w[] * L[] : lambda[];
+		K[] = (1 - delta) * K[-1] + I[];
+	};
+
+
+	calibration
+	{
+		sigma_C = 1.5; # taken from some paper
+		sigma_L = 2.0; # frisch inverse elasticity of labour - does not matter as much
+		beta = 0.99; # beta is the time discount: 1/30years treasuries
+		delta = 0.05:; # probability of a machine breaking down every period
+	};
+};
